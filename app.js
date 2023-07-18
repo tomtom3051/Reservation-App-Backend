@@ -10,7 +10,7 @@ const friendRoute = require('./routes/friend');
 const businessHoursRoute = require('./routes/businessHours');
 const friendRequestRoute = require('./routes/friendRequest');
 
-
+//Bhavya you are a homosexual
 const app = express();
 
 app.use(bodyParser.json());
