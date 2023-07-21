@@ -171,7 +171,8 @@ function signupBusiness(req, res) {
                         password: hash,
                         profileImgPath: 'https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg',
                         description: ''
-                        //location: req.body.location
+                        //longitude: req.body.longitude
+                        //latitude: req.body.latitude
                     }
 
                     //Schema bellow is used to validate user details before allowing them into the database

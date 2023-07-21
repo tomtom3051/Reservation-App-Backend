@@ -62,7 +62,8 @@ function updateBusiness(req, res) {
         email: req.body.email,
         profileImgPath: req.body.profileImgPath,
         description: req.body.description,
-        location: req.body.location
+        longitude: req.body.longitude,
+        latitude: req.body.latitude
     }
 
     const schema = {
@@ -70,7 +71,8 @@ function updateBusiness(req, res) {
         email: { type: "string", optional: false, max: "100" },
         // profileImgPath: {type:"string", optional: true, max: "40"},
         description: { type:"string", optional: true, max: "500" },
-        location: { type: "string", optional: true, max: "100" }
+        //replace with lon and lat
+        //location: { type: "string", optional: true, max: "100" }
     }
 
     const v = new Validator();
@@ -123,6 +125,7 @@ function getBussinessesInArray(req, res) {
         });
     });
 }
+
 
 module.exports = {
     getBusinesses: getBusinesses,

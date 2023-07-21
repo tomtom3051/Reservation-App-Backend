@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     profileImgPath: DataTypes.STRING,
     description: DataTypes.TEXT,
-    location: DataTypes.STRING
+    longitude: DataTypes.DECIMAL(10, 8),
+    latitude: DataTypes.DECIMAL(10, 8)
   }, {
     sequelize,
     modelName: 'Business',
