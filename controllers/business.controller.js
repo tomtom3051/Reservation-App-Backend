@@ -126,10 +126,27 @@ function getBussinessesInArray(req, res) {
     });
 }
 
+function getBusinessLocation(req, res) {
+    const id = req.params.id;
+
+    models.Business.findOne({
+        attributes: ['latitude', 'longitude'],
+        where: { id: id }
+    }).then(result => {
+        res.status(200).json(result);
+    }).catch((error) => {
+        res.status(500).json({
+          message: "Something went wrong!",
+          error: error
+        });
+      });
+}
+
 
 module.exports = {
     getBusinesses: getBusinesses,
     getBusiness: getBusiness,
     updateBusiness: updateBusiness,
-    getBussinessesInArray: getBussinessesInArray
+    getBussinessesInArray: getBussinessesInArray,
+    getBusinessLocation: getBusinessLocation
 }

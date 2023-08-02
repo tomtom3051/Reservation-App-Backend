@@ -288,6 +288,15 @@ function deleteBusinessAccount(req, res) {
     });
 }
 
+/**
+ * This function is used to update the location and description of a business
+ * @param {*} req : the req send by the front end
+ * @param {*} res : the response send by the back end
+ */
+function updateBussinessInfo(req, res) {
+
+}
+
 module.exports = {
     signupUser: signupUser,
     loginUser: loginUser,
@@ -295,5 +304,6 @@ module.exports = {
 
     signupBusiness: signupBusiness,
     loginBusiness: loginBusiness,
-    deleteBusinessAccount: deleteBusinessAccount
+    deleteBusinessAccount: deleteBusinessAccount,
+    updateBussinessInfo: updateBussinessInfo
 }

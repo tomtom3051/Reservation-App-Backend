@@ -9,6 +9,11 @@ router.get(
     businessController.getBussinessesInArray
 );
 
+router.get(
+    "/location/:id",
+    businessController.getBusinessLocation
+)
+
 //path to get info on specific business
 router.get(
     "/:id", //http path
