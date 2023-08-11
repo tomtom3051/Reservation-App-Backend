@@ -9,6 +9,8 @@ const favoriteRoute = require('./routes/favorite');
 const friendRoute = require('./routes/friend');
 const businessHoursRoute = require('./routes/businessHours');
 const friendRequestRoute = require('./routes/friendRequest');
+const floorplanRoute = require('./routes/floorplan');
+const reservableRoute = require('./routes/reservable');
 
 //Bhavya you are a homosexual
 const app = express();
@@ -52,6 +54,11 @@ app.use("/friend", friendRoute);
 app.use("/hours", businessHoursRoute);
 
 //For handling friend requests
-app.use('/request', friendRequestRoute);
+app.use("/request", friendRequestRoute);
 
+//For handling floorplans
+app.use("/floorplan", floorplanRoute);
+
+//For handling reservables
+app.use("/reservable", reservableRoute);
 module.exports = app;

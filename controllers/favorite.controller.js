@@ -1,6 +1,13 @@
 const models = require("../models");
 const Validator = require("fastest-validator");
 
+/**
+ * Function adds a business as a favorite for a specific user
+ * user and business specified in req params
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 async function addFavorite(req, res) {
   try {
     //construct favorite object
@@ -66,37 +73,13 @@ async function addFavorite(req, res) {
     });
   }
 }
+
 /**
- * This function gets an array of all business id's favorited by a user.
- * This function is no longer used as the new one returns businesses instead of ids only.
+ * Removes business as a favorite for a user if a favorite relation exists
+ * Business and user specified in req params
  * @param {*} req 
  * @param {*} res 
  */
-// function getFavoritesOld(req, res) {
-//   const userId = parseInt(req.params.userId, 10);
-
-//   models.Favorite.findAll({
-//     where: { userId: userId },
-//     attributes: ['businessId']
-//   }).then((result) => {
-//     if (result.length > 0) {
-//       const businessIds = result.map(favorite => favorite.businessId);
-//       res.status(200).json({
-//         favoriteIds: businessIds
-//       });
-//     } else {
-//       res.status(200).json({
-//         favoriteIds: []
-//       });
-//     }
-//   }).catch((error) => {
-//     res.status(500).json({
-//       message: "Something went wrong!",
-//       error: error
-//     });
-//   });
-// }
-
 function deleteFavorite(req, res) {
     const favorite = {
         userId: parseInt(req.params.userId, 10),
@@ -146,6 +129,12 @@ function checkFavorite(req, res) {
   });
 }
 
+/**
+ * Function gets all favorites for a specific user
+ * User specified in req params.
+ * @param {*} req 
+ * @param {*} res 
+ */
 function getFavorites(req, res) {
   //get user id
   const userId = parseInt(req.params.userId, 10);

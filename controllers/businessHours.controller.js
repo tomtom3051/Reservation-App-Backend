@@ -1,7 +1,11 @@
 const models = require('../models');
 const Validator = require('fastest-validator');
 
-
+/**
+ * Function gets business hours for one specific business specified by the businessId in the params
+ * @param {*} req 
+ * @param {*} res 
+ */
 function getBusinessHours(req, res) {
     const id = req.params.businessId;
 
@@ -22,12 +26,18 @@ function getBusinessHours(req, res) {
     });
 }
 
+/**
+ * Function adds business hours for a specific business for a specific day both specified in the
+ * req body
+ * @param {*} req 
+ * @param {*} res 
+ */
 function addBusinessHours(req, res) {
     //First check if an entry for this business on this day already exists
-    console.log('reached');
+    // console.log('reached');
     models.BusinessHours.findOne({
         where: {
-            businessId: req.body.businessId,
+            businessId: parseInt(req.body.businessId, 10),
             day: req.body.day
         }
     }).then(result => {
@@ -76,6 +86,12 @@ function deleteBusinessHours(req, res) {
     
 }
 
+/**
+ * Function updates business hours for a specific business for a specific day
+ * both specified in the req params
+ * @param {*} req 
+ * @param {*} res 
+ */
 function updateBusinessHours(req, res) {
     const businessId = parseInt(req.params.businessId, 10);
     const day = req.params.day;
@@ -106,6 +122,12 @@ function updateBusinessHours(req, res) {
 
 }
 
+/**
+ * Function gets business hours for a specific day and a specific business
+ * Day and business specified in the req params
+ * @param {*} req 
+ * @param {*} res 
+ */
 function getDayBusinessHours(req, res) {
     const businessId = parseInt(req.params.businessId, 10);
     const day = req.params.day;

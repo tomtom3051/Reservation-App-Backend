@@ -1,7 +1,13 @@
 const models = require('../models');
 const { Op } = require('sequelize');
 
-
+/**
+ * Adds a friend request from request user to receive user
+ * users specified in req params.
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 async function addRequest(req, res) {
     try {
         const request = {
@@ -82,6 +88,11 @@ async function addRequest(req, res) {
     }
 }
 
+/**
+ * Deletes a friend request between users when request is denied or accepted
+ * @param {*} req 
+ * @param {*} res 
+ */
 function deleteRequest(req, res) {
     const request = {
         requestUserId: parseInt(req.params.requestUserId, 10),
