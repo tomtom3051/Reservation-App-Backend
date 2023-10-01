@@ -6,7 +6,7 @@ const router = express.Router();
 //Path to get all businesses with their id in the json object attached
 router.get(
     "/favorites",
-    businessController.getBussinessesInArray
+    businessController.getBusinessesInArray
 );
 
 router.get(
@@ -30,9 +30,39 @@ router.get(
 
 //Path to update values in business table
 router.patch(
-    "/:id", //http path
+    "/business/:id", //http path
     //add middleware to authenticate request comes from a the business itself
     businessController.updateBusiness
+);
+
+//Path to update description info
+router.patch(
+    "/description/:id",
+    businessController.updateDescription
+);
+
+//Path to update location info
+router.patch(
+    "/location/:id",
+    businessController.updateLocation
+);
+
+//Path to update location and description info
+router.patch(
+    "/locdesc/:id",
+    businessController.updateDescriptionAndLocation
+);
+
+//Path to get all businesses in a given radius from a given position
+router.get(
+    "/find/:lat/:lng/:rad",
+    businessController.getBusinessesInRange
+);
+
+//Path to get location and description info for specific business
+router.get(
+    "/info/:businessId",
+    businessController.getBusinessInfo
 );
 
 module.exports = router;

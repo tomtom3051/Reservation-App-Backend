@@ -55,7 +55,7 @@ function getUsers(req, res) {
  * @param {*} res: the response send by the back end
  */
 function updateUser(req, res) {
-    const id =req.params.id;
+    const id = req.params.id;
     const updatedUser = {
         name: req.body.name,
         email: req.body.email,
@@ -80,7 +80,7 @@ function updateUser(req, res) {
         })
     }
 
-    models.User.update(updatedUser, { where: {id: id}}).then(result => {
+    models.User.update(updatedUser, { where: {id: id} }).then(result => {
         res.status(200).json({
             message: "User updated successfully!",
             user: updatedUser

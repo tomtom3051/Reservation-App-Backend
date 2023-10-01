@@ -17,13 +17,13 @@ router.post(
 
 //Route to delete all business hours from a specific business
 router.delete(
-    "/:businessId",
+    "/delete/:hoursId",
     businessHoursController.deleteBusinessHours
 );
 
 //Route to update hours from a specific business for a specific day
 router.patch(
-    "/:businessId/:day",
+    "/update/:hoursId",
     businessHoursController.updateBusinessHours
 );
 

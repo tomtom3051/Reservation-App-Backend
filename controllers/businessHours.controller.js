@@ -10,7 +10,7 @@ function getBusinessHours(req, res) {
     const id = req.params.businessId;
 
     models.BusinessHours.findAll({
-        attributes: ['day', 'opening_time', 'closing_time'],
+        attributes: ['id', 'day', 'opening_time', 'closing_time'],
         where: {
             businessId: id
         }
@@ -82,31 +82,47 @@ function addBusinessHours(req, res) {
     });
 }
 
+/**
+ * Function deletes business hours based on the id they are stored with
+ * @param {*} req 
+ * @param {*} res 
+ */
 function deleteBusinessHours(req, res) {
-    
+    const hoursId = parseInt(req.params.hoursId, 10);
+
+    models.BusinessHours.destroy({
+        where: {
+            id: hoursId
+        }
+    }).then(result => {
+        res.status(200).json({
+            message: "Business hours removed!"
+        });
+    }).catch(error => {
+        res.status(500).json({
+            message: 'Something went wrong!',
+            error: error
+        });
+    });
 }
 
 /**
  * Function updates business hours for a specific business for a specific day
- * both specified in the req params
+ * based on the id of the current hours info
  * @param {*} req 
  * @param {*} res 
  */
 function updateBusinessHours(req, res) {
-    const businessId = parseInt(req.params.businessId, 10);
-    const day = req.params.day;
+    const hoursId = parseInt(req.params.hoursId, 10);
 
-    const updatedEntry = {
-        businessId: req.body.businessId,
-        day: req.body.day,
+    const updatedhours = {
         opening_time: req.body.opening_time,
         closing_time: req.body.closing_time
     }
 
-    models.BusinessHours.update(updatedEntry, {
+    models.BusinessHours.update(updatedhours, {
         where: {
-            businessId: businessId,
-            day: day
+            id: hoursId
         }
     }).then(result => {
         res.status(200).json({
@@ -121,6 +137,7 @@ function updateBusinessHours(req, res) {
     });
 
 }
+
 
 /**
  * Function gets business hours for a specific day and a specific business

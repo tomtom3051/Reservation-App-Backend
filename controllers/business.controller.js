@@ -1,5 +1,6 @@
 const models = require('../models');
 const Validator = require('fastest-validator');
+const { Op, literal } = require('sequelize');
 
 /**
  * This function gets a specific business via their id.
@@ -98,7 +99,7 @@ function updateBusiness(req, res) {
     });
 }
 
-function getBussinessesInArray(req, res) {
+function getBusinessesInArray(req, res) {
     const { businessIds } = req.query;
 
     if (businessIds.length === 0) {
@@ -142,11 +143,168 @@ function getBusinessLocation(req, res) {
       });
 }
 
+//Function gets all business within a set radius from set co-ordinates
+function getBusinessesInRange(req, res) {
+    const lat = parseFloat(req.params.lat);
+    const lng = parseFloat(req.params.lng);
+
+    const radius = parseInt(req.params.rad, 10);
+
+    // console.log("lat: " + lat + ", lng: " + lng + ", rad: " + radius);
+
+    models.Business.findAll({
+        where: where(
+            fn(
+                'ST_DistanceSphere',
+                col('coordinates'),
+                literal()
+            )
+        )
+    });
+}
+
+//Gets the description and location info for a specific business
+function getBusinessInfo(req, res) {
+    const businessId = parseInt(req.params.businessId);
+
+    models.Business.findByPk(businessId, {
+        attributes: ['description', 'longitude', 'latitude']
+    }).then(result => {
+        if (result) {
+            res.status(200).json(result);
+        } else {
+            res.status(404).json({
+                message: "Business " + businessId + " not found"
+            });
+        }
+    }).catch(error => {
+        res.status(500).json({
+            message: "Something went wrong!",
+            error: error
+        });
+    });
+} 
+
+function updateDescription(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const updatedDescription = {
+        description: req.body.description
+    };
+
+    //validator
+    const schema = {
+        description: { type:"string", optional: true, max: "500" }
+    }
+
+    const v = new Validator();
+    const validationResponse = v.validate(updatedDescription, schema);
+
+    if(validationResponse !== true) {
+        return res.status(400).json({
+            message: "Data is not valid",
+            errors: validationResponse
+        });
+    }
+    
+    //Update description in the database
+    models.Business.update(updatedDescription, { where: {id: id} }).then(result => {
+        res.status(200).json({
+            message: "Description updated successfully!",
+            description: updatedDescription
+        });
+    }).catch(error => {
+        res.status(500).json({
+            message: "Could not update description!",
+            error: error
+        });
+    });
+}
+
+function updateLocation(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const updatedLocation = {
+        longitude: parseFloat(req.body.longitude),
+        latitude: parseFloat(req.body.latitude),
+    };
+
+    //validator
+    const schema = {
+        longitude: { type:"number", integer: false },
+        latitude: { type:"number", integer: false }
+    }
+
+    const v = new Validator();
+    const validationResponse = v.validate(updatedLocation, schema);
+
+    if(validationResponse !== true) {
+        return res.status(400).json({
+            message: "Data is not valid",
+            errors: validationResponse
+        });
+    }
+    
+    //Update description in the database
+    models.Business.update(updatedLocation, { where: {id: id} }).then(result => {
+        res.status(200).json({
+            message: "Location updated successfully!",
+            location: updatedLocation
+        });
+    }).catch(error => {
+        res.status(500).json({
+            message: "Could not update location!",
+            error: error
+        });
+    });
+}
+
+function updateDescriptionAndLocation(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const updatedInfo = {
+        description: req.body.description,
+        longitude: parseFloat(req.body.longitude),
+        latitude: parseFloat(req.body.latitude),
+    };
+
+    //validator
+    const schema = {
+        description: { type:"string", optional: true, max: "500" },
+        longitude: { type:"number", integer: false },
+        latitude: { type:"number", integer: false }
+    }
+
+    const v = new Validator();
+    const validationResponse = v.validate(updatedInfo, schema);
+
+    if(validationResponse !== true) {
+        return res.status(400).json({
+            message: "Data is not valid",
+            errors: validationResponse
+        });
+    }
+    
+    //Update description in the database
+    models.Business.update(updatedInfo, { where: {id: id} }).then(result => {
+        res.status(200).json({
+            message: "Location and description updated successfully!",
+            info: updatedInfo
+        });
+    }).catch(error => {
+        res.status(500).json({
+            message: "Could not update location and descriptio!",
+            error: error
+        });
+    });
+}
 
 module.exports = {
     getBusinesses: getBusinesses,
     getBusiness: getBusiness,
     updateBusiness: updateBusiness,
-    getBussinessesInArray: getBussinessesInArray,
-    getBusinessLocation: getBusinessLocation
+    getBusinessesInArray: getBusinessesInArray,
+    getBusinessLocation: getBusinessLocation,
+    getBusinessesInRange: getBusinessesInRange,
+    getBusinessInfo: getBusinessInfo,
+    updateDescription: updateDescription,
+    updateLocation: updateLocation,
+    updateDescriptionAndLocation: updateDescriptionAndLocation
 }
