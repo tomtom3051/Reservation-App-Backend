@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 //For sending img files to the front end
-//app.use('/uploads', express.static('uploads'));
+app.use('/pictures', express.static('pictures'));
 
 //For login, signup and delete account
 app.use("/auth", authRoute);

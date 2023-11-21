@@ -1,4 +1,5 @@
 const multer = require("multer");
+const path = require("path");
 
 /**
  * This function defines where the image is stored and what it is called.

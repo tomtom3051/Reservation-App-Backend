@@ -77,7 +77,7 @@ function updateUser(req, res) {
         return res.status(400).json({
             message: "Data is not valid",
             errors: validationResponse
-        })
+        });
     }
 
     models.User.update(updatedUser, { where: {id: id} }).then(result => {
@@ -121,9 +121,46 @@ function getUsersInArray(req, res) {
     });
 }
 
+function updateProfilePictureDescription(req, res) {
+    const id = req.params.id;
+    const updatedUser = {
+        profileImgPath: req.body.profileImgPath,
+        description: req.body.description
+    }
+
+    const schema = {
+        profileImgPath: {type:"string", optional: false, max: "500"},
+        description: { type:"string", optional: true, max: "500" }
+    }
+
+    const v = new Validator();
+    const validationResponse = v.validate(updatedUser, schema);
+
+    if(validationResponse !== true) {
+        return res.status(400).json({
+            message: "Data is not valid",
+            errors: validationResponse
+        });
+    }
+
+    models.User.update(updatedUser, { where: {id: id} }).then(result => {
+        res.status(200).json({
+            message: "User picture updated successfully!",
+            user: updatedUser
+        });
+    }).catch(error => {
+        res.status(500).json({
+            message: "Could not update user picture!",
+            error: error
+        });
+    });
+
+}
+
 module.exports = {
     getUser: getUser,
     getUsers: getUsers,
     updateUser: updateUser,
-    getUsersInArray: getUsersInArray
+    getUsersInArray: getUsersInArray,
+    updateProfilePictureDescription: updateProfilePictureDescription
 }

@@ -30,4 +30,11 @@ router.patch(
     userController.updateUser
 );
 
+//Update Profile pic and description
+router.patch(
+    "/update/:id",
+    //middleware needed
+    userController.updateProfilePictureDescription
+)
+
 module.exports = router;

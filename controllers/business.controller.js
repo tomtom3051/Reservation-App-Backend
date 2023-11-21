@@ -1,6 +1,11 @@
 const models = require('../models');
 const Validator = require('fastest-validator');
-const { Op, literal } = require('sequelize');
+const { Op, literal, Sequelize } = require('sequelize');
+const sequelize = new Sequelize('reservation_app', 'root', 'Hoogstraat77', {
+    host: '127.0.0.1',
+    dialect: 'mysql'
+});
+const { QueryTypes } = require('sequelize');
 
 /**
  * This function gets a specific business via their id.
@@ -143,24 +148,30 @@ function getBusinessLocation(req, res) {
       });
 }
 
+
+
 //Function gets all business within a set radius from set co-ordinates
-function getBusinessesInRange(req, res) {
+async function getBusinessesInRange(req, res) {
     const lat = parseFloat(req.params.lat);
     const lng = parseFloat(req.params.lng);
 
-    const radius = parseInt(req.params.rad, 10);
+    const rad = parseInt(req.params.rad, 10);
 
     // console.log("lat: " + lat + ", lng: " + lng + ", rad: " + radius);
 
-    models.Business.findAll({
-        where: where(
-            fn(
-                'ST_DistanceSphere',
-                col('coordinates'),
-                literal()
-            )
-        )
-    });
+    await sequelize.query(
+        "SELECT * FROM businesses b WHERE acos(sin(b.latitude * 0.0175) * sin(:lat * 0.0175) + cos(b.latitude * 0.0175) * cos(:lat * 0.0175) * cos((:lng * 0.0175) - (b.longitude * 0.0175))) * 6371 <= :rad", 
+        { replacements: { lat, lng, rad }, type: QueryTypes.SELECT })
+            .then(result => {
+                res.status(200).json({
+                    businesses: result
+                });
+            }).catch(error => {
+                res.status(500).json({
+                    message: "Could not fetch businesses!",
+                    error: error
+                });
+            });
 }
 
 //Gets the description and location info for a specific business

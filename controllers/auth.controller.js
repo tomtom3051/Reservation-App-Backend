@@ -29,7 +29,7 @@ function signupUser(req, res) {
                         email: req.body.email,
                         password: hash,
                         //Not sure if this location is correct but can be changed later.
-                        profileImgPath: 'https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg',
+                        profileImgPath: 'http://localhost:3000/pictures/default.png',
                         description: ''
                     }
 

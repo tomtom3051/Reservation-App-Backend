@@ -30,7 +30,7 @@ router.get(
 
 //Path to update values in business table
 router.patch(
-    "/business/:id", //http path
+    "/update/:id", //http path
     //add middleware to authenticate request comes from a the business itself
     businessController.updateBusiness
 );
