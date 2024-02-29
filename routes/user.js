@@ -3,6 +3,11 @@ const userController = require('../controllers/user.controller');
 
 const router = express.Router();
 
+router.get(
+    "/find/:id/:username",
+    userController.searchByUsername
+);
+
 //Path to get users in provided params array
 router.get(
     "/friends",

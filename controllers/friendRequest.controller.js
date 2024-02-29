@@ -117,6 +117,7 @@ function deleteRequest(req, res) {
 
 }
 
+//Gets all pending friend request for a user with the id provided in the url
 async function getRequests(req, res) {
     try {
         const receiverUserId = parseInt(req.params.receiverUserId, 10);

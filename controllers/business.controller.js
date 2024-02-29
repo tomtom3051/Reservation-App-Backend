@@ -15,7 +15,9 @@ const { QueryTypes } = require('sequelize');
 function getBusiness(req, res) {
     const id = req.params.id;
 
-    models.Business.findByPk(id).then(result => {
+    models.Business.findByPk(id, {
+        attributes: ['id', 'name', 'email', 'profileImgPath', 'description']
+    }).then(result => {
         if (result) {
             res.status(200).json(result);
         } else {
@@ -37,7 +39,9 @@ function getBusiness(req, res) {
  * @param {*} res: the response send by the back end
  */
 function getBusinesses(req, res) {
-    models.Business.findAll().then(result => {
+    models.Business.findAll({
+        attributes: ['id', 'name', 'email', 'profileImgPath', 'description']
+    }).then(result => {
         if (result) {
             res.status(200).json({
                 businesses: result
@@ -104,6 +108,8 @@ function updateBusiness(req, res) {
     });
 }
 
+
+//Input is an array of business IDs, this function gets business info for all these businesses
 function getBusinessesInArray(req, res) {
     const { businessIds } = req.query;
 
@@ -117,6 +123,7 @@ function getBusinessesInArray(req, res) {
     const businessIdsArray = businessIds.split(',');
 
     models.Business.findAll({
+        attributes: ['id', 'name', 'email', 'profileImgPath', 'description'],
         where: {
             id: businessIdsArray
         }
@@ -132,6 +139,9 @@ function getBusinessesInArray(req, res) {
     });
 }
 
+
+//This function gets the location of a specific business
+//It is used to mark the business on google maps on the front end
 function getBusinessLocation(req, res) {
     const id = req.params.id;
 
@@ -151,6 +161,7 @@ function getBusinessLocation(req, res) {
 
 
 //Function gets all business within a set radius from set co-ordinates
+//It is used to get all users within a certain radius of the user
 async function getBusinessesInRange(req, res) {
     const lat = parseFloat(req.params.lat);
     const lng = parseFloat(req.params.lng);
@@ -160,7 +171,7 @@ async function getBusinessesInRange(req, res) {
     // console.log("lat: " + lat + ", lng: " + lng + ", rad: " + radius);
 
     await sequelize.query(
-        "SELECT * FROM businesses b WHERE acos(sin(b.latitude * 0.0175) * sin(:lat * 0.0175) + cos(b.latitude * 0.0175) * cos(:lat * 0.0175) * cos((:lng * 0.0175) - (b.longitude * 0.0175))) * 6371 <= :rad", 
+        "SELECT id, name, email, profileImgPath, description FROM businesses b WHERE acos(sin(b.latitude * 0.0175) * sin(:lat * 0.0175) + cos(b.latitude * 0.0175) * cos(:lat * 0.0175) * cos((:lng * 0.0175) - (b.longitude * 0.0175))) * 6371 <= :rad", 
         { replacements: { lat, lng, rad }, type: QueryTypes.SELECT })
             .then(result => {
                 res.status(200).json({
@@ -196,6 +207,7 @@ function getBusinessInfo(req, res) {
     });
 } 
 
+//Used to update the discription of a business stored in the database
 function updateDescription(req, res) {
     const id = parseInt(req.params.id, 10);
     const updatedDescription = {
@@ -231,6 +243,7 @@ function updateDescription(req, res) {
     });
 }
 
+//Used to update the location of a business stored in the database
 function updateLocation(req, res) {
     const id = parseInt(req.params.id, 10);
     const updatedLocation = {
@@ -268,6 +281,7 @@ function updateLocation(req, res) {
     });
 }
 
+//Used to update both the description and location of a business in the database at the same time
 function updateDescriptionAndLocation(req, res) {
     const id = parseInt(req.params.id, 10);
     const updatedInfo = {

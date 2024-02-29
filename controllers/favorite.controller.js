@@ -150,7 +150,8 @@ function getFavorites(req, res) {
       models.Business.findAll({
         where: {
             id: businessIds
-        }
+        },
+        attributes: ['id', 'name', 'email', 'profileImgPath', 'description']
       }).then(result => {
         res.status(200).json({
             favorites: result

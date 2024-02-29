@@ -1,5 +1,6 @@
 const models = require('../models');
 const Validator = require('fastest-validator');
+const { Op } = require('sequelize');
 
 /**
  * This function gets a specific user via their id.
@@ -93,6 +94,7 @@ function updateUser(req, res) {
     });
 }
 
+//Gets all user info of users ids in an incoming array
 function getUsersInArray(req, res) {
     const { ids } = req.query;
 
@@ -121,6 +123,7 @@ function getUsersInArray(req, res) {
     });
 }
 
+//Updates the profile pic and description of a user
 function updateProfilePictureDescription(req, res) {
     const id = req.params.id;
     const updatedUser = {
@@ -157,10 +160,40 @@ function updateProfilePictureDescription(req, res) {
 
 }
 
+
+function searchByUsername(req, res) {
+    const id = req.params.id;
+    const username = req.params.username;
+    
+    //console.log(username);
+
+    models.User.findAll({
+        attributes: ['id', 'name', 'profileImgPath'],
+        where: {
+            name: {
+                [Op.like]: `${username}%`
+            },
+            id: {
+                [Op.ne]: id
+            }
+        }
+    }).then(results => {
+        res.status(200).json({
+            users: results
+        });
+    }).catch(error => {
+        res.status(500).json({
+            message: "Something went wrong!",
+            error: error
+        });
+    });
+}
+
 module.exports = {
     getUser: getUser,
     getUsers: getUsers,
     updateUser: updateUser,
     getUsersInArray: getUsersInArray,
-    updateProfilePictureDescription: updateProfilePictureDescription
+    updateProfilePictureDescription: updateProfilePictureDescription,
+    searchByUsername: searchByUsername
 }
