@@ -155,10 +155,10 @@ async function getRequests(req, res) {
     }
 }
 
-function checkRequest(req, res) {}
+
 
 module.exports = {
     addRequest: addRequest,
     deleteRequest: deleteRequest,
-    getRequests: getRequests
+    getRequests: getRequests,
 }

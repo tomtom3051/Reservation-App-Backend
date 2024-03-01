@@ -3,6 +3,11 @@ const friendController = require('../controllers/friend.controller');
 
 const router = express.Router();
 
+router.get(
+    '/friendStatus/:id1/:id2',
+    friendController.checkFriendStatus
+)
+
 //Path to get all friends of friendId
 router.get(
     '/:friendId',
