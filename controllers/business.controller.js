@@ -168,6 +168,8 @@ async function getBusinessesInRange(req, res) {
 
     const rad = parseInt(req.params.rad, 10);
 
+    
+
     // console.log("lat: " + lat + ", lng: " + lng + ", rad: " + radius);
 
     await sequelize.query(
@@ -184,6 +186,12 @@ async function getBusinessesInRange(req, res) {
                 });
             });
 }
+
+//TEST INPUT
+
+//const input = req.params.input;
+// AND b.name LIKE :input || '%'
+//, input: input + '%'
 
 //Gets the description and location info for a specific business
 function getBusinessInfo(req, res) {
