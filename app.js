@@ -12,7 +12,6 @@ const friendRequestRoute = require('./routes/friendRequest');
 const floorplanRoute = require('./routes/floorplan');
 const reservableRoute = require('./routes/reservable');
 
-//Bhavya you are a homosexual
 const app = express();
 
 app.use(bodyParser.json());
